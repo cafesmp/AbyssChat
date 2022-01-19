@@ -24,7 +24,7 @@ public final class VilleChat extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        this.chatVariableSet.register(new BalanceChatVariable(this), new ItemChatVariable(new VilleChat()));;
+        this.chatVariableSet.register(new BalanceChatVariable(this), new ItemChatVariable(this));
 
         this.hook();
         this.loadFiles();
