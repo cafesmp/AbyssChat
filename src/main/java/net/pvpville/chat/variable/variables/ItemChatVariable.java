@@ -22,11 +22,9 @@ public class ItemChatVariable implements ChatVariable {
     private final Set<String> variables = ImmutableSet.of("[item]", "[hand]");
 
     private final String show;
-    private final List<String> tooltip;
 
     public ItemChatVariable(final VilleChat plugin) {
         this.show = plugin.getVariables().getString("variables.item.show");
-        this.tooltip = plugin.getVariables().getStringList("variables.item.tooltip");
     }
 
     @Override
@@ -54,7 +52,7 @@ public class ItemChatVariable implements ChatVariable {
                 .addPlaceholder("%amount%", Utils.format(item.getAmount()))
                 .addPlaceholder("%player%", player.getName());
 
-        return MessageFactory.paper(replacer.parse(this.show)).tooltip(replacer.parse(this.tooltip)).build();
+        return MessageFactory.paper(replacer.parse(this.show)).item(item).build();
     }
 
 }

@@ -5,5 +5,3 @@ variables:
       - "&7Name: %player%"
   item:
     show: "&6[&e%item% x%amount%&6]"
-    tooltip:
-      - "&7Name: %player%"
