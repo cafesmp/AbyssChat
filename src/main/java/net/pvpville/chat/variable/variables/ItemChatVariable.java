@@ -25,8 +25,8 @@ public class ItemChatVariable implements ChatVariable {
     private final List<String> tooltip;
 
     public ItemChatVariable(final VilleChat plugin) {
-        this.show = plugin.getVariables().getString("variables.balance.show");
-        this.tooltip = plugin.getVariables().getStringList("variables.balance.tooltip");
+        this.show = plugin.getVariables().getString("variables.item.show");
+        this.tooltip = plugin.getVariables().getStringList("variables.item.tooltip");
     }
 
     @Override
@@ -50,7 +50,6 @@ public class ItemChatVariable implements ChatVariable {
         final ItemMeta meta = item.getItemMeta();
 
         final PlaceholderReplacer replacer = new PlaceholderReplacer()
-                .setUsePlaceholderAPI(true)
                 .addPlaceholder("%item%", meta.hasDisplayName() ? meta.getDisplayName() : WordUtils.capitalize(item.getType().name().replace("_", " ").toLowerCase()))
                 .addPlaceholder("%amount%", Utils.format(item.getAmount()))
                 .addPlaceholder("%player%", player.getName());
