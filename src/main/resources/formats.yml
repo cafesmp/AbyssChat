@@ -1,0 +1,28 @@
+formats:
+  default:
+    priority: 2147483647
+    channel: ''
+    prefix: '%villesides_side%%luckperms_prefix%'
+    name_color: ''
+    name: '%essentials_nickname%'
+    suffix: '%legendtags_tag%&8&l» &7'
+    chat_color: '&7'
+    channel_tooltip:
+      - ''
+    prefix_tooltip:
+      - '&8&m-----------------------------'
+      - ''
+      - '&eInformation'
+      - '&e&l▎ &7Name: &f%player_name%'
+      - '&e&l▎ &7Rank: &f%luckperms_prefix%'
+      - '&e&l▎ &7Balance: &f$%vault_eco_balance_formatted%'
+      - ''
+      - '&8&m-----------------------------'
+    name_tooltip:
+      - ''
+    suffix_tooltip:
+      - ''
+    channel_click_command: '/msg %player_name% '
+    prefix_click_command: '/msg %player_name% '
+    name_click_command: '/msg %player_name% '
+    suffix_click_command: ''

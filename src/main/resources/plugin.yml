@@ -2,9 +2,10 @@ name: VilleChat
 version: '${project.version}'
 main: net.pvpville.chat.VilleChat
 api-version: 1.16
-depend: [ VilleAPI ]
 authors: [ sysdm ]
 description: Chat system for PvPVille (PaperAPI for components)
 website: https://pvpville.net
 depend:
   - Vault
+  - VilleCommons
+  - LuckPerms

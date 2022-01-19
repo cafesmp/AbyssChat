@@ -1,6 +1,6 @@
-package net.pvpville.chat.variables.set;
+package net.pvpville.chat.variable.set;
 
-import net.pvpville.chat.variables.ChatVariable;
+import net.pvpville.chat.variable.ChatVariable;
 
 import java.util.Arrays;
 import java.util.HashSet;

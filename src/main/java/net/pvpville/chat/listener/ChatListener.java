@@ -3,17 +3,17 @@ package net.pvpville.chat.listener;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
-import net.pvpville.chat.variables.ChatVariable;
-import net.pvpville.chat.variables.set.ChatVariableSet;
+import net.pvpville.chat.VilleChat;
+import net.pvpville.chat.variable.ChatVariable;
+import net.pvpville.chat.variable.set.ChatVariableSet;
+import org.aspect.aspectcommons.abstracts.AspectListener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class ChatListener implements Listener {
+public class ChatListener extends AspectListener<VilleChat> {
 
-    private final ChatVariableSet set;
-
-    public ChatListener(final ChatVariableSet set) {
-        this.set = set;
+    public ChatListener(final VilleChat plugin) {
+        super(plugin);
     }
 
     @EventHandler
@@ -21,20 +21,22 @@ public class ChatListener implements Listener {
 
         final String plain = PlainComponentSerializer.plain().serialize(event.message());
 
-        for (final ChatVariable chatVariable : this.set.getSet()) {
+        for (final ChatVariable chatVariable : this.getPlugin().getChatVariableSet().getSet()) {
 
             for (final String variable : chatVariable.getVariables()) {
 
-                if(!plain.contains(variable)) {
+                if (!plain.contains(variable)) {
                     continue;
                 }
                 if (!chatVariable.canUse(event.getPlayer())) {
                     continue;
                 }
 
-                TextReplacementConfig.builder()
+                final TextReplacementConfig config = TextReplacementConfig.builder()
                         .matchLiteral(variable)
-                        .replacement(chatVariable.getReplacement());
+                        .replacement(chatVariable.getReplacement(event.getPlayer())).build();
+
+                event.message(event.message().replaceText(config));
             }
 
         }

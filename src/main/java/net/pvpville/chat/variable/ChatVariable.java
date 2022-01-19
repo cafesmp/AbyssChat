@@ -1,4 +1,4 @@
-package net.pvpville.chat.variables;
+package net.pvpville.chat.variable;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -9,9 +9,7 @@ import java.util.Set;
 public interface ChatVariable {
 
     boolean canUse(final Player player);
-
     @NotNull Set<String> getVariables();
-    @NotNull String getPermission();
-    @NotNull Component getReplacement();
+    @NotNull Component getReplacement(final Player player);
 
 }
