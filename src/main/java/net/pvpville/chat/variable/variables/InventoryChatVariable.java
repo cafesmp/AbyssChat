@@ -1,6 +1,7 @@
 package net.pvpville.chat.variable.variables;
 
 import com.google.common.collect.ImmutableSet;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.pvpville.chat.VilleChat;
 import net.pvpville.chat.variable.ChatVariable;
@@ -16,15 +17,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public class ItemChatVariable implements ChatVariable {
+public class InventoryChatVariable implements ChatVariable {
 
-    private final Set<String> variables = ImmutableSet.of("[item]", "[hand]");
-
-    private final String show;
-
-    public ItemChatVariable(final VilleChat plugin) {
-        this.show = plugin.getVariables().getString("variables.item.show");
-    }
+    private final Set<String> variables = ImmutableSet.of("[inv]", "[brag]", "[inventory]", "[ifyoufindthisyouarecoolashellbro]");
 
     @Override
     public boolean canUse(final Player player) {
@@ -51,7 +46,7 @@ public class ItemChatVariable implements ChatVariable {
                 .addPlaceholder("%amount%", Utils.format(item.getAmount()))
                 .addPlaceholder("%player%", player.getName());
 
-        return MessageFactory.spigot(replacer.parse(this.show)).item(item).build();
+        return null;
     }
 
 }

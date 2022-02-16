@@ -2,6 +2,7 @@ package net.pvpville.chat.variable.variables;
 
 import com.google.common.collect.ImmutableSet;
 import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.pvpville.chat.VilleChat;
 import net.pvpville.chat.variable.ChatVariable;
 import net.pvpville.commons.text.builder.MessageFactory;
@@ -31,7 +32,7 @@ public class BalanceChatVariable implements ChatVariable {
 
     @Override
     public boolean canUse(final Player player) {
-        return player.hasPermission("villechat.variable.balance");
+        return player.hasPermission("villechat.balance");
     }
 
     @Override
@@ -40,12 +41,12 @@ public class BalanceChatVariable implements ChatVariable {
     }
 
     @Override
-    public @NotNull Component getReplacement(final Player player) {
+    public @NotNull BaseComponent[] getReplacement(final Player player) {
         final PlaceholderReplacer replacer = new PlaceholderReplacer()
                 .setUsePlaceholderAPI(true)
                 .addPlaceholder("%balance%", Utils.format(this.plugin.getEconomy().getBalance(player)))
                 .addPlaceholder("%player%", player.getName());
 
-        return MessageFactory.paper(replacer.parse(this.show)).tooltip(replacer.parse(this.tooltip)).build();
+        return MessageFactory.spigot(replacer.parse(this.show)).tooltip(replacer.parse(this.tooltip)).build();
     }
 }

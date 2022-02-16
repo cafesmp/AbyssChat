@@ -1,0 +1,11 @@
+Messages:
+    "NO-PERMISSION-FOR-VAR":
+        Sound:
+            Enabled: true
+            Value: "FIZZ"
+            Volume: 1
+            Pitch: 1
+        Message:
+            Enabled: true
+            Value:
+                - "&cYou don't have permission to use the &4%var%&c variable!"

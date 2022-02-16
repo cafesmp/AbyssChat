@@ -1,12 +1,12 @@
 package net.pvpville.chat;
 
 import net.luckperms.api.LuckPerms;
-import net.pvpville.chat.format.ChatFormat;
-import net.pvpville.chat.listener.ChatListener;
+import net.pvpville.chat.listeners.ChatListener;
 import net.pvpville.chat.variable.variables.BalanceChatVariable;
 import net.pvpville.chat.variable.set.ChatVariableSet;
 import net.pvpville.chat.variable.variables.ItemChatVariable;
 import org.aspect.aspectcommons.abstracts.EconomyProvider;
+import org.aspect.aspectcommons.chat.MessageCache;
 import org.aspect.aspectcommons.economy.EconomyManager;
 import org.aspect.aspectcommons.files.FileManager;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,20 +17,24 @@ public final class VilleChat extends JavaPlugin {
 
     private final ChatVariableSet chatVariableSet = new ChatVariableSet();
     private final FileManager<VilleChat> fileManager = new FileManager<>(this);
+    private final MessageCache messageCache = new MessageCache(this.getConfig());
 
     private EconomyProvider economy;
     private LuckPerms luckPerms;
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+        this.saveDefaultConfig();
         this.chatVariableSet.register(new BalanceChatVariable(this), new ItemChatVariable(this));
 
         this.hook();
         this.loadFiles();
 
         new ChatListener(this);
-        new ChatFormat(this);
+
+        for (final String message : this.getConfig().getConfigurationSection("Messages").getKeys(false)) {
+            this.messageCache.loadMessage("Messages." + message);
+        }
     }
 
     public EconomyProvider getEconomy() {
@@ -53,9 +57,8 @@ public final class VilleChat extends JavaPlugin {
         return this.chatVariableSet;
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+    public MessageCache getMessageCache() {
+        return this.messageCache;
     }
 
     private void loadFiles() {
