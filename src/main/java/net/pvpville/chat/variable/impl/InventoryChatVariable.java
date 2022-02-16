@@ -1,9 +1,7 @@
-package net.pvpville.chat.variable.variables;
+package net.pvpville.chat.variable.impl;
 
 import com.google.common.collect.ImmutableSet;
-import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.pvpville.chat.VilleChat;
 import net.pvpville.chat.variable.ChatVariable;
 import net.pvpville.commons.text.builder.MessageFactory;
 import org.apache.commons.lang.WordUtils;

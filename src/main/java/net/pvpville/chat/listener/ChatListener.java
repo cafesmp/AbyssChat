@@ -1,18 +1,15 @@
-package net.pvpville.chat.listeners;
+package net.pvpville.chat.listener;
 
 import net.luckperms.api.model.user.User;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import net.pvpville.chat.VilleChat;
+import net.pvpville.chat.util.GroupMessage;
 import net.pvpville.chat.variable.ChatVariable;
-import net.pvpville.commons.text.builder.AbstractMessageBuilder;
-import net.pvpville.commons.text.builder.MessageFactory;
 import org.aspect.aspectcommons.abstracts.AspectListener;
 import org.aspect.aspectcommons.builders.PlaceholderReplacer;
 import org.aspect.aspectcommons.chat.Color;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,6 +36,8 @@ public class ChatListener extends AspectListener<VilleChat> {
     @EventHandler
     public void format(final AsyncPlayerChatEvent event) {
 
+        event.setCancelled(true);
+
         final Player player = event.getPlayer();
         final String group = this.getGroup(player);
         final ConfigurationSection section = this.formats.get(this.formats.containsKey(group) ? group : "default");
@@ -56,15 +55,15 @@ public class ChatListener extends AspectListener<VilleChat> {
         final String nameCommand = this.replacer.parse(player, section.getString("name_click_command"));
         final String suffixCommand = this.replacer.parse(player, section.getString("suffix_click_command"));
 
-        final AbstractMessageBuilder<TextComponent, BaseComponent[]> prefix = MessageFactory.spigot(prefixString)
+        final GroupMessage prefix = new GroupMessage(prefixString)
                 .tooltip(prefixTooltipList)
                 .suggest(prefixCommand);
 
-        final AbstractMessageBuilder<TextComponent, BaseComponent[]> name = MessageFactory.spigot(nameColor + nameString)
+        final GroupMessage name = new GroupMessage(nameColor + nameString)
                 .tooltip(nameTooltipList)
                 .suggest(nameCommand);
 
-        final AbstractMessageBuilder<TextComponent, BaseComponent[]> suffix = MessageFactory.spigot(suffixString + chatColor)
+        final GroupMessage suffix = new GroupMessage(suffixString + chatColor)
                 .tooltip(suffixTooltipList)
                 .suggest(suffixCommand);
 
@@ -85,15 +84,19 @@ public class ChatListener extends AspectListener<VilleChat> {
             }
         }
 
-        final BaseComponent[] component = new ComponentBuilder()
-                .append(prefix.build())
-                .append(name.build())
-                .append(suffix.build())
-                .append(event.getMessage())
-                .create();
 
-        event.setFormat("%2$s");
-        event.setMessage(this.getFormattedMessage(component));
+        final ComponentBuilder builder = new ComponentBuilder()
+                .append(prefix.getFormattedMessage())
+                .append(name.getFormattedMessage())
+                .append(suffix.getFormattedMessage())
+                .append(event.getMessage());
+
+
+        for (final Player online : this.getPlugin().getServer().getOnlinePlayers()) {
+            online.spigot().sendMessage(builder.create());
+        }
+
+
     }
 
     private String getGroup(final Player player) {
@@ -109,7 +112,7 @@ public class ChatListener extends AspectListener<VilleChat> {
     private String getFormattedMessage(final BaseComponent[] components) {
         final StringBuilder sb = new StringBuilder();
         for (final BaseComponent component : components){
-            if (!sb.isEmpty()) {
+            if (sb.length() == 0) {
                 sb.append(" ").append(((TextComponent) component).getText());
                 continue;
             }

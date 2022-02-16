@@ -1,4 +1,4 @@
-package net.pvpville.chat.variable.variables;
+package net.pvpville.chat.variable.impl;
 
 import com.google.common.collect.ImmutableSet;
 import net.md_5.bungee.api.chat.BaseComponent;

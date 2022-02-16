@@ -1,10 +1,10 @@
 package net.pvpville.chat;
 
 import net.luckperms.api.LuckPerms;
-import net.pvpville.chat.listeners.ChatListener;
-import net.pvpville.chat.variable.variables.BalanceChatVariable;
+import net.pvpville.chat.listener.ChatListener;
+import net.pvpville.chat.variable.impl.BalanceChatVariable;
 import net.pvpville.chat.variable.set.ChatVariableSet;
-import net.pvpville.chat.variable.variables.ItemChatVariable;
+import net.pvpville.chat.variable.impl.ItemChatVariable;
 import org.aspect.aspectcommons.abstracts.EconomyProvider;
 import org.aspect.aspectcommons.chat.MessageCache;
 import org.aspect.aspectcommons.economy.EconomyManager;
