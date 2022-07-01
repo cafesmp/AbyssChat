@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public final class AbyssRenderer implements ChatRenderer {
         COLOR_MAP.put(ChatColor.BLUE, new ColorSet<>(85, 85, 255));
         COLOR_MAP.put(ChatColor.GREEN, new ColorSet<>(85, 255, 85));
         COLOR_MAP.put(ChatColor.AQUA, new ColorSet<>(85, 255, 255));
-        COLOR_MAP.put(ChatColor.RED, new ColorSet<Integer, Integer, Integer>(255, 85, 85));
+        COLOR_MAP.put(ChatColor.RED, new ColorSet<>(255, 85, 85));
         COLOR_MAP.put(ChatColor.LIGHT_PURPLE, new ColorSet<>(255, 85, 255));
         COLOR_MAP.put(ChatColor.YELLOW, new ColorSet<>(255, 255, 85));
         COLOR_MAP.put(ChatColor.WHITE, new ColorSet<>(255, 255, 255));
@@ -74,9 +75,19 @@ public final class AbyssRenderer implements ChatRenderer {
                                      final @NotNull Component message,
                                      final @NotNull Audience viewer) {
 
-        final int r = COLOR_MAP.get(ChatColor.getByChar(this.chatColor)).red();
-        final int g = COLOR_MAP.get(ChatColor.getByChar(this.chatColor)).green();
-        final int b = COLOR_MAP.get(ChatColor.getByChar(this.chatColor)).blue();
+
+
+        ColorSet<Integer, Integer, Integer> color = COLOR_MAP.get(ChatColor.getByChar(this.chatColor));
+
+        if (color == null) {
+            return Component.text()
+                    .append(this.component)
+                    .append(message.color(TextColor.fromHexString(this.chatColor))).build();
+        }
+
+        final int r = color.red();
+        final int g = color.green();
+        final int b = color.blue();
 
         return Component.text()
                 .append(this.component)

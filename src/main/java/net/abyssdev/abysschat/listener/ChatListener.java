@@ -4,6 +4,7 @@ import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.abyssdev.abysschat.AbyssChat;
 import net.abyssdev.abysschat.comparator.GroupComparator;
+import net.abyssdev.abysschat.format.Format;
 import net.abyssdev.abysschat.renderer.AbyssRenderer;
 import net.abyssdev.abysschat.util.ChatMessage;
 import net.abyssdev.abysschat.variable.ChatVariable;
@@ -23,16 +24,15 @@ import java.util.*;
 
 public class ChatListener extends AbyssListener<AbyssChat> {
 
-    private static final Comparator<Pair<String, ConfigurationSection>> COMPARATOR = new GroupComparator();
-    private static final PlaceholderReplacer REPLACER = new PlaceholderReplacer().setUsePlaceholderAPI(true);
+    private static final Comparator<Pair<String, Format>> COMPARATOR = new GroupComparator();
 
-    private final Map<String, ConfigurationSection> formats = new HashMap<>();
+    private final Map<String, Format> formats = new HashMap<>();
 
     public ChatListener(final AbyssChat plugin) {
         super(plugin);
 
         for (final String group : plugin.getFormats().getConfigurationSection("formats").getKeys(false)) {
-            this.formats.put(group, plugin.getFormats().getConfigurationSection("formats." + group));
+            this.formats.put(group, new Format(plugin.getFormats().getConfigurationSection("formats." + group)));
         }
     }
 
@@ -48,8 +48,16 @@ public class ChatListener extends AbyssListener<AbyssChat> {
         for (final ChatVariable variable : this.getPlugin().getChatVariableSet().getSet()) {
 
             for (final String var : variable.getVariables()) {
-                if (!message.contains(var) || !variable.canUse(event.getPlayer())) {
+                if (!message.contains(var)) {
                     continue;
+                }
+
+                if (!variable.canUse(event.getPlayer())) {
+                    this.getPlugin().getMessageCache().sendMessage(
+                            event.getPlayer(),
+                            "messages.no-permission-for-variable",
+                            new PlaceholderReplacer().addPlaceholder("%variable%", var)
+                    );
                 }
 
                 final TextReplacementConfig config = TextReplacementConfig.builder()
@@ -63,37 +71,11 @@ public class ChatListener extends AbyssListener<AbyssChat> {
 
         final Player player = event.getPlayer();
         final String group = this.getGroup(player);
-        final ConfigurationSection section = this.formats.get(this.formats.containsKey(group) ? group : "default");
+        final Format format = this.formats.get(this.formats.containsKey(group) ? group : "default");
 
-        final String prefixString = ChatListener.REPLACER.parse(player, Color.parse(section.getString("prefix")));
-        final String suffixString = ChatListener.REPLACER.parse(player, Color.parse(section.getString("suffix")));
-        final String nameColor = ChatListener.REPLACER.parse(player, Color.parse(section.getString("name-color")));
-        final String nameString = ChatListener.REPLACER.parse(player, Color.parse(section.getString("name")));
-        final String chatColor = section.getString("chat-color");
+        final TextComponent component = format.getComponent(player);
 
-        final List<String> prefixTooltipList = ChatListener.REPLACER.parse(player, Color.parse(section.getStringList("prefix-tooltip")));
-        final List<String> nameTooltipList = ChatListener.REPLACER.parse(player, Color.parse(section.getStringList("name-tooltip")));
-        final List<String> suffixTooltipList = ChatListener.REPLACER.parse(player, Color.parse(section.getStringList("suffix-tooltip")));
-        final String prefixCommand = ChatListener.REPLACER.parse(player, section.getString("prefix-click-command"));
-        final String nameCommand = ChatListener.REPLACER.parse(player, section.getString("name-click-command"));
-        final String suffixCommand = ChatListener.REPLACER.parse(player, section.getString("suffix-click-command"));
-
-        final ChatMessage prefix = new ChatMessage(prefixString)
-                .tooltip(prefixTooltipList)
-                .suggest(prefixCommand);
-        final ChatMessage name = new ChatMessage(nameColor + nameString)
-                .tooltip(nameTooltipList)
-                .suggest(nameCommand);
-        final ChatMessage suffix = new ChatMessage(suffixString)
-                .tooltip(suffixTooltipList)
-                .suggest(suffixCommand);
-
-        final TextComponent component = Component.text()
-                .append(prefix.getComponent())
-                .append(name.getComponent())
-                .append(suffix.getComponent()).build();
-
-        final ChatRenderer renderer = new AbyssRenderer(component, chatColor);
+        final ChatRenderer renderer = new AbyssRenderer(component, format.getChatColor());
 
         renderer.render(player, player.displayName(), Component.text().content(Color.parse(message)).build(), this.getPlugin().getServer());
 
@@ -103,9 +85,9 @@ public class ChatListener extends AbyssListener<AbyssChat> {
 
     private String getGroup(final Player player) {
 
-        final Set<Pair<String, ConfigurationSection>> set = new TreeSet<>(ChatListener.COMPARATOR);
+        final Set<Pair<String, Format>> set = new TreeSet<>(ChatListener.COMPARATOR);
 
-        for (final Map.Entry<String, ConfigurationSection> entry : this.formats.entrySet()) {
+        for (final Map.Entry<String, Format> entry : this.formats.entrySet()) {
 
             if (!player.hasPermission("abysschat.group." + entry.getKey())) {
                 continue;

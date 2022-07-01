@@ -8,7 +8,6 @@ import net.abyssdev.abysslib.economy.provider.Economy;
 import net.abyssdev.abysslib.economy.registry.impl.DefaultEconomyRegistry;
 import net.abyssdev.abysslib.plugin.AbyssPlugin;
 import net.abyssdev.abysslib.text.MessageCache;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public final class AbyssChat extends AbyssPlugin {
