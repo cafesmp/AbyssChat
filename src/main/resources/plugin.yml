@@ -1,11 +1,8 @@
-name: VilleChat
+name: AbyssChat
 version: '${project.version}'
-main: net.pvpville.chat.VilleChat
-api-version: 1.16
-authors: [ sysdm ]
-description: Chat system for PvPVille (PaperAPI for components)
-website: https://pvpville.net
+main: net.abyssdev.abysschat.AbyssChat
+authors:
+  - sysdm
 depend:
   - Vault
-  - VilleCommons
-  - LuckPerms
+  - AbyssLib

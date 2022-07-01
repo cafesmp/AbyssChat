@@ -1,12 +1,13 @@
-package net.pvpville.chat.variable.impl;
+package net.abyssdev.abysschat.variable.impl;
 
 import com.google.common.collect.ImmutableSet;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.pvpville.chat.variable.ChatVariable;
-import net.pvpville.commons.text.builder.MessageFactory;
-import org.apache.commons.lang.WordUtils;
-import org.aspect.aspectcommons.builders.PlaceholderReplacer;
-import org.aspect.aspectcommons.utils.Utils;
+import net.abyssdev.abysschat.AbyssChat;
+import net.abyssdev.abysschat.variable.ChatVariable;
+import net.abyssdev.abysslib.placeholder.PlaceholderReplacer;
+import net.abyssdev.abysslib.text.builder.MessageFactory;
+import net.abyssdev.abysslib.utils.Utils;
+import net.kyori.adventure.text.Component;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,13 +16,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public class InventoryChatVariable implements ChatVariable {
+public class ItemChatVariable implements ChatVariable {
 
-    private final Set<String> variables = ImmutableSet.of("[inv]", "[brag]", "[inventory]", "[ifyoufindthisyouarecoolashellbro]");
+    private final Set<String> variables = ImmutableSet.of("[item]", "[hand]");
+
+    private final String show;
+
+    public ItemChatVariable(final AbyssChat plugin) {
+        this.show = plugin.getVariables().getString("variables.item.show");
+    }
 
     @Override
     public boolean canUse(final Player player) {
-        return player.hasPermission("villechat.item");
+        return player.hasPermission("abysschat.item");
     }
 
     @Override
@@ -30,11 +37,11 @@ public class InventoryChatVariable implements ChatVariable {
     }
 
     @Override
-    public @NotNull BaseComponent[] getReplacement(final Player player) {
+    public @NotNull Component getReplacement(final Player player) {
         final ItemStack item = player.getItemInHand();
 
         if(item.getType() == Material.AIR) {
-            return MessageFactory.spigot("&e[Air x1]").build();
+            return MessageFactory.paper("&e[Air x1]").build();
         }
 
         final ItemMeta meta = item.getItemMeta();
@@ -44,7 +51,7 @@ public class InventoryChatVariable implements ChatVariable {
                 .addPlaceholder("%amount%", Utils.format(item.getAmount()))
                 .addPlaceholder("%player%", player.getName());
 
-        return null;
+        return MessageFactory.paper(replacer.parse(this.show)).item(item).build();
     }
 
 }

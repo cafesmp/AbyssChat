@@ -1,6 +1,6 @@
-package net.pvpville.chat.variable.set;
+package net.abyssdev.abysschat.variable.set;
 
-import net.pvpville.chat.variable.ChatVariable;
+import net.abyssdev.abysschat.variable.ChatVariable;
 
 import java.util.Arrays;
 import java.util.HashSet;

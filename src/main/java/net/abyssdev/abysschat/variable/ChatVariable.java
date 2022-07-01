@@ -1,5 +1,6 @@
-package net.pvpville.chat.variable;
+package net.abyssdev.abysschat.variable;
 
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,7 @@ public interface ChatVariable {
 
     boolean canUse(final Player player);
     @NotNull Set<String> getVariables();
-    @NotNull BaseComponent[] getReplacement(final Player player);
+    @NotNull
+    Component getReplacement(final Player player);
 
 }

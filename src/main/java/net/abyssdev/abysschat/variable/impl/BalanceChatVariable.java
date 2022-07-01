@@ -1,12 +1,13 @@
-package net.pvpville.chat.variable.impl;
+package net.abyssdev.abysschat.variable.impl;
 
 import com.google.common.collect.ImmutableSet;
+import net.abyssdev.abysschat.AbyssChat;
+import net.abyssdev.abysschat.variable.ChatVariable;
+import net.abyssdev.abysslib.placeholder.PlaceholderReplacer;
+import net.abyssdev.abysslib.text.builder.MessageFactory;
+import net.abyssdev.abysslib.utils.Utils;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.pvpville.chat.VilleChat;
-import net.pvpville.chat.variable.ChatVariable;
-import net.pvpville.commons.text.builder.MessageFactory;
-import org.aspect.aspectcommons.builders.PlaceholderReplacer;
-import org.aspect.aspectcommons.utils.Utils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,12 +16,12 @@ import java.util.Set;
 
 public class BalanceChatVariable implements ChatVariable {
 
-    private final VilleChat plugin;
+    private final AbyssChat plugin;
 
     private final String show;
     private final List<String> tooltip;
 
-    public BalanceChatVariable(final VilleChat plugin) {
+    public BalanceChatVariable(final AbyssChat plugin) {
         this.plugin = plugin;
 
         this.show = plugin.getVariables().getString("variables.balance.show");
@@ -31,7 +32,7 @@ public class BalanceChatVariable implements ChatVariable {
 
     @Override
     public boolean canUse(final Player player) {
-        return player.hasPermission("villechat.balance");
+        return player.hasPermission("abysschat.balance");
     }
 
     @Override
@@ -40,12 +41,12 @@ public class BalanceChatVariable implements ChatVariable {
     }
 
     @Override
-    public @NotNull BaseComponent[] getReplacement(final Player player) {
+    public @NotNull Component getReplacement(final Player player) {
         final PlaceholderReplacer replacer = new PlaceholderReplacer()
                 .setUsePlaceholderAPI(true)
                 .addPlaceholder("%balance%", Utils.format(this.plugin.getEconomy().getBalance(player)))
                 .addPlaceholder("%player%", player.getName());
 
-        return MessageFactory.spigot(replacer.parse(this.show)).tooltip(replacer.parse(this.tooltip)).build();
+        return MessageFactory.paper(replacer.parse(this.show)).tooltip(replacer.parse(this.tooltip)).build();
     }
 }
