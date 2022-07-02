@@ -20,7 +20,7 @@ Method Renamer Dictonary: iIiIiIi
 Field Renamer: 'true'
 Field Renamer Dictonary: iIiIiIi
 Dictionary: ALPHABET_UPPER
-Dependencies: ['resources.jar', 'rt.jar', 'sunrsasign.jar', 'jsse.jar', 'jce.jar', 'charsets.jar', 'jfr.jar', 'spigot-1.17.1.jar', 'libs/battle-pass-3.8.5.jar']
+Dependencies: ['resources.jar', 'rt.jar', 'sunrsasign.jar', 'jsse.jar', 'jce.jar', 'charsets.jar', 'jfr.jar', 'spigot-1.17.1.jar']
 Exclusions: ['Global: com/', 'Global: edu/', 'Global: io/', 'Global: javax/', 'Global:
-    me/', 'Global: nonapi/', 'Global: org/', 'Global: uk/', 'Global: co/', 'Global: net/abyssdev/abyssreactions/hooks/']
+    me/', 'Global: nonapi/', 'Global: org/', 'Global: uk/', 'Global: co/']
 Inclusions: []
