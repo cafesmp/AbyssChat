@@ -39,18 +39,18 @@ public final class Format {
 
         this.priority = section.getInt("priority");
 
-        this.prefix = Color.parse(section.getString("prefix"));
-        this.suffix = Color.parse(section.getString("suffix"));
-        this.nameColor = Color.parse(section.getString("name-color"));
-        this.name = Color.parse(section.getString("name"));
-        this.chatColor = section.getString("chat-color");
-        this.prefixCommand = section.getString("prefix-click-command");
-        this.nameCommand = section.getString("name-click-command");
-        this.suffixCommand = section.getString("suffix-click-command");
+        this.prefix = Format.REPLACER.parse(Color.parse(section.getString("prefix")));
+        this.suffix = Format.REPLACER.parse(Color.parse(section.getString("suffix")));
+        this.nameColor = Format.REPLACER.parse(Color.parse(section.getString("name-color")));
+        this.name = Format.REPLACER.parse(Color.parse(section.getString("name")));
+        this.chatColor = Format.REPLACER.parse(section.getString("chat-color"));
+        this.prefixCommand = Format.REPLACER.parse(section.getString("prefix-click-command"));
+        this.nameCommand = Format.REPLACER.parse(section.getString("name-click-command"));
+        this.suffixCommand = Format.REPLACER.parse(section.getString("suffix-click-command"));
 
-        this.prefixTooltip = Color.parse(section.getStringList("prefix-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining());
-        this.nameTooltip = Color.parse(section.getStringList("name-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining());
-        this.suffixTooltip = Color.parse(section.getStringList("suffix-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining());
+        this.prefixTooltip = Format.REPLACER.parse(Color.parse(section.getStringList("prefix-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining()));
+        this.nameTooltip = Format.REPLACER.parse(Color.parse(section.getStringList("name-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining()));
+        this.suffixTooltip = Format.REPLACER.parse(Color.parse(section.getStringList("suffix-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining()));
 
     }
 
