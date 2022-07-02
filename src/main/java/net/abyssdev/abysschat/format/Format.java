@@ -1,15 +1,19 @@
 package net.abyssdev.abysschat.format;
 
 import lombok.Getter;
-import net.abyssdev.abysschat.util.ChatMessage;
 import net.abyssdev.abysslib.placeholder.PlaceholderReplacer;
 import net.abyssdev.abysslib.text.Color;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
+import net.abyssdev.abysslib.text.builder.MessageFactory;
+import net.abyssdev.abysslib.utils.AbyssComponentBuilder;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public final class Format {
@@ -27,9 +31,9 @@ public final class Format {
     private final String nameCommand;
     private final String suffixCommand;
 
-    private final List<String> prefixTooltip;
-    private final List<String> nameTooltip;
-    private final List<String> suffixTooltip;
+    private final String prefixTooltip;
+    private final String nameTooltip;
+    private final String suffixTooltip;
     
     public Format(final ConfigurationSection section) {
 
@@ -44,35 +48,42 @@ public final class Format {
         this.nameCommand = section.getString("name-click-command");
         this.suffixCommand = section.getString("suffix-click-command");
 
-        this.prefixTooltip = Color.parse(section.getStringList("prefix-tooltip"));
-        this.nameTooltip = Color.parse(section.getStringList("name-tooltip"));
-        this.suffixTooltip = Color.parse(section.getStringList("suffix-tooltip"));
+        this.prefixTooltip = Color.parse(section.getStringList("prefix-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining());
+        this.nameTooltip = Color.parse(section.getStringList("name-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining());
+        this.suffixTooltip = Color.parse(section.getStringList("suffix-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining());
 
     }
 
-    public ChatMessage getPrefixMessage(final Player player) {
-        return new ChatMessage(Format.REPLACER.parse(player, this.prefix))
-                .tooltip(Format.REPLACER.parse(player, this.prefixTooltip))
-                .suggest(Format.REPLACER.parse(player, this.prefixCommand));
+
+    public TextComponent getPrefixMessage(final Player player) {
+        final TextComponent component = new TextComponent(TextComponent.fromLegacyText(Format.REPLACER.parse(player, this.prefix)));
+
+        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(this.prefixTooltip)));
+        component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, this.prefixCommand));
+
+        return component;
     }
 
-    public ChatMessage getNameMessage(final Player player) {
-        return new ChatMessage(Format.REPLACER.parse(player, this.name))
-                .tooltip(Format.REPLACER.parse(player, this.nameTooltip))
-                .suggest(Format.REPLACER.parse(player, this.nameCommand));
+    public TextComponent getNameMessage(final Player player) {
+        final TextComponent component = new TextComponent(TextComponent.fromLegacyText(Format.REPLACER.parse(player, this.name)));
+
+        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(this.nameTooltip)));
+        component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, this.nameCommand));
+
+        return component;
     }
 
-    public ChatMessage getSuffixMessage(final Player player) {
-        return new ChatMessage(Format.REPLACER.parse(player, this.suffix))
-                .tooltip(Format.REPLACER.parse(player, this.suffixTooltip))
-                .suggest(Format.REPLACER.parse(player, this.suffixCommand));
+    public TextComponent getSuffixMessage(final Player player) {
+        final TextComponent component = new TextComponent(TextComponent.fromLegacyText(Format.REPLACER.parse(player, this.suffix)));
+
+        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(this.suffixTooltip)));
+        component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, this.suffixCommand));
+
+        return component;
     }
 
-    public TextComponent getComponent(final Player player) {
-        return Component.text()
-                .append(this.getPrefixMessage(player).getComponent())
-                .append(this.getNameMessage(player).getComponent())
-                .append(this.getSuffixMessage(player).getComponent()).build();
+    public TextComponent[] getComponent(final Player player) {
+        return new TextComponent[] {this.getPrefixMessage(player), this.getNameMessage(player), this.getSuffixMessage(player)};
     }
 
 

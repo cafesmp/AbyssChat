@@ -2,7 +2,6 @@ package net.abyssdev.abysschat.auth;
 
 import net.abyssdev.abysschat.AbyssChat;
 import net.abyssdev.abysslib.text.Color;
-import org.bukkit.Bukkit;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

@@ -1,24 +1,24 @@
 package net.abyssdev.abysschat.listener;
 
-import io.papermc.paper.chat.ChatRenderer;
-import io.papermc.paper.event.player.AsyncChatEvent;
 import net.abyssdev.abysschat.AbyssChat;
 import net.abyssdev.abysschat.comparator.GroupComparator;
 import net.abyssdev.abysschat.format.Format;
-import net.abyssdev.abysschat.renderer.AbyssRenderer;
 import net.abyssdev.abysschat.variable.ChatVariable;
 import net.abyssdev.abysslib.listener.AbyssListener;
 import net.abyssdev.abysslib.placeholder.PlaceholderReplacer;
 import net.abyssdev.abysslib.text.Color;
+import net.abyssdev.abysslib.utils.AbyssComponentBuilder;
 import net.abyssdev.abysslib.utils.tuple.Pair;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.TextReplacementConfig;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.lang.reflect.Array;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class ChatListener extends AbyssListener<AbyssChat> {
 
@@ -35,18 +35,22 @@ public class ChatListener extends AbyssListener<AbyssChat> {
     }
 
     @EventHandler
-    public void format(final AsyncChatEvent event) {
+    public void format(final AsyncPlayerChatEvent event) {
+        event.setFormat("%2$s");
 
-        final String message = PlainTextComponentSerializer.plainText().serialize(event.message());
 
-        if (event.getPlayer().hasPermission("abysschat.color")) {
-            event.message(Component.text().content(Color.parse(message)).build());
-        }
+        event.setCancelled(true);
+
+        final Player player = event.getPlayer();
+        final String group = this.getGroup(player);
+        final Format format = this.formats.get(this.formats.containsKey(group) ? group : "default");
+
+        final List<TextComponent> components = new LinkedList<>(Arrays.asList(format.getComponent(player)));
 
         for (final ChatVariable variable : this.getPlugin().getChatVariableSet().getSet()) {
 
             for (final String var : variable.getVariables()) {
-                if (!message.contains(var)) {
+                if (!event.getMessage().contains(var)) {
                     continue;
                 }
 
@@ -56,28 +60,39 @@ public class ChatListener extends AbyssListener<AbyssChat> {
                             "messages.no-permission-for-variable",
                             new PlaceholderReplacer().addPlaceholder("%variable%", var)
                     );
+                    return;
                 }
 
-                final TextReplacementConfig config = TextReplacementConfig.builder()
-                        .matchLiteral(var)
-                        .replacement(variable.getReplacement(event.getPlayer())).build();
+                final String[] split = event.getMessage().split(Pattern.quote(var));
+                event.setMessage(event.getMessage().replace(var, ""));
 
-                event.message(event.message().replaceText(config));
+                if (split.length >= 1) {
+                    components.add(new TextComponent(TextComponent.fromLegacyText(
+                            player.hasPermission("abysschat.color") ? Color.parse(format.getChatColor() + split[0])
+                                    : Color.parse(format.getChatColor() + Color.strip(split[0])))));
+                }
+
+                components.add(variable.getReplacement(player));
+
+                if (split.length > 1) {
+                    components.add(new TextComponent(TextComponent.fromLegacyText(
+                            player.hasPermission("abysschat.color") ? Color.parse(format.getChatColor() + split[1])
+                                    : Color.parse(format.getChatColor() + Color.strip(split[1])))));
+                }
             }
 
         }
 
-        final Player player = event.getPlayer();
-        final String group = this.getGroup(player);
-        final Format format = this.formats.get(this.formats.containsKey(group) ? group : "default");
+        if (components.size() == 3) {
+            components.add(new TextComponent(TextComponent.fromLegacyText(
+                                    player.hasPermission("abysschat.color") ? Color.parse(format.getChatColor() + event.getMessage())
+                                            : Color.parse(format.getChatColor() + Color.strip(event.getMessage())))));
 
-        final TextComponent component = format.getComponent(player);
+        }
 
-        final ChatRenderer renderer = new AbyssRenderer(component, format.getChatColor());
-
-        renderer.render(player, player.displayName(), Component.text().content(Color.parse(message)).build(), this.getPlugin().getServer());
-
-        event.renderer(renderer);
+        for (final Player online : Bukkit.getOnlinePlayers()) {
+            online.spigot().sendMessage(components.toArray(new BaseComponent[0]));
+        }
 
     }
 
