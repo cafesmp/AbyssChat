@@ -1,8 +1,9 @@
 name: AbyssChat
-version: '${project.version}'
+version: '1.0.0'
 main: net.abyssdev.abysschat.AbyssChat
 authors:
   - sysdm
+  - Relocation
 depend:
-  - Vault
   - AbyssLib
+  - Vault

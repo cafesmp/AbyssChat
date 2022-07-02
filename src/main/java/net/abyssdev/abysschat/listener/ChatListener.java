@@ -6,7 +6,6 @@ import net.abyssdev.abysschat.AbyssChat;
 import net.abyssdev.abysschat.comparator.GroupComparator;
 import net.abyssdev.abysschat.format.Format;
 import net.abyssdev.abysschat.renderer.AbyssRenderer;
-import net.abyssdev.abysschat.util.ChatMessage;
 import net.abyssdev.abysschat.variable.ChatVariable;
 import net.abyssdev.abysslib.listener.AbyssListener;
 import net.abyssdev.abysslib.placeholder.PlaceholderReplacer;
@@ -16,7 +15,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
