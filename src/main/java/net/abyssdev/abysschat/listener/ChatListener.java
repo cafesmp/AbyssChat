@@ -3,11 +3,11 @@ package net.abyssdev.abysschat.listener;
 import net.abyssdev.abysschat.AbyssChat;
 import net.abyssdev.abysschat.comparator.GroupComparator;
 import net.abyssdev.abysschat.format.Format;
+import net.abyssdev.abysschat.player.ChatPlayer;
 import net.abyssdev.abysschat.variable.ChatVariable;
 import net.abyssdev.abysslib.listener.AbyssListener;
 import net.abyssdev.abysslib.placeholder.PlaceholderReplacer;
 import net.abyssdev.abysslib.text.Color;
-import net.abyssdev.abysslib.utils.AbyssComponentBuilder;
 import net.abyssdev.abysslib.utils.tuple.Pair;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -37,11 +36,10 @@ public class ChatListener extends AbyssListener<AbyssChat> {
     @EventHandler
     public void format(final AsyncPlayerChatEvent event) {
         event.setFormat("%2$s");
-
-
         event.setCancelled(true);
 
         final Player player = event.getPlayer();
+        final ChatPlayer chatPlayer = this.getPlugin().getStorage().get(player.getUniqueId());
         final String group = this.getGroup(player);
         final Format format = this.formats.get(this.formats.containsKey(group) ? group : "default");
 
@@ -94,6 +92,7 @@ public class ChatListener extends AbyssListener<AbyssChat> {
             online.spigot().sendMessage(components.toArray(new BaseComponent[0]));
         }
 
+        chatPlayer.setMessages(chatPlayer.getMessages() + 1);
     }
 
     private String getGroup(final Player player) {

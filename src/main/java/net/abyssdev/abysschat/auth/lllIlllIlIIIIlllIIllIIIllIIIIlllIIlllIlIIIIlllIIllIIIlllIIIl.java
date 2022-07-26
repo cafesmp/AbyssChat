@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
 
 @SuppressWarnings("all")
-public class lllIlllIlIIIIlllIIllIIIllIIIIlllIIlllIlIIIIlllIIllIIIlllIIIl {
+public final class lllIlllIlIIIIlllIIllIIIllIIIIlllIIlllIlIIIIlllIIllIIIlllIIIl {
 
     private static final String UNKNOWN = "%%_USER_%%";
     public static boolean a;

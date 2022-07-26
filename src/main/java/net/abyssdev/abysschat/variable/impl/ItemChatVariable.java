@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public class ItemChatVariable implements ChatVariable {
+public final class ItemChatVariable implements ChatVariable {
 
     private final Set<String> variables = ImmutableSet.of("[item]", "[hand]");
 

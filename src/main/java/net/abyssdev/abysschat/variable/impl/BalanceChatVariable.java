@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class BalanceChatVariable implements ChatVariable {
+public final class BalanceChatVariable implements ChatVariable {
 
     private final AbyssChat plugin;
 

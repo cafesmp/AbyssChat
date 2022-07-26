@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ChatVariableSet {
+public final class ChatVariableSet {
 
     private final Set<ChatVariable> set = new HashSet<>();
 

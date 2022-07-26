@@ -1,0 +1,29 @@
+title: "&8&lCHAT TOP"
+rows: 3
+top-slots: [10, 11, 12, 13, 14, 15, 16]
+top-update-interval: 60 #seconds
+borders:
+  "gray":
+    material: "GRAY_STAINED_GLASS_PANE"
+    name: " "
+    lore: []
+    slots:
+      - "0-26"
+invalid-item:
+  material: "PLAYER_HEAD"
+  skull: "MHF_Question"
+  name: "&c???"
+  lore: []
+valid-item:
+  material: "PLAYER_HEAD"
+  skull: "%player%"
+  name: "&3&l[&b&l!&3&l] &b%player% &7(#%rank%)"
+  lore:
+    - "&7&o(( &f&o%player%&7&o has &f&o%amount%x&7&o messages! ))"
+stats-item:
+  slot: 26
+  material: "PLAYER_HEAD"
+  skull: "%player%"
+  name: "&3&l[&b&l!&3&l] &b%player% &7(#%rank%)"
+  lore:
+    - "&7&o(( You currently have &f&o%amount%x&7&o messages! ))"
