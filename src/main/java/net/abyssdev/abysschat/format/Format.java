@@ -36,7 +36,6 @@ public final class Format {
     private final String suffixTooltip;
     
     public Format(final ConfigurationSection section) {
-
         this.priority = section.getInt("priority");
 
         this.prefix = Format.REPLACER.parse(Color.parse(section.getString("prefix")));
@@ -51,7 +50,6 @@ public final class Format {
         this.prefixTooltip = Format.REPLACER.parse(Color.parse(section.getStringList("prefix-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining()));
         this.nameTooltip = Format.REPLACER.parse(Color.parse(section.getStringList("name-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining()));
         this.suffixTooltip = Format.REPLACER.parse(Color.parse(section.getStringList("suffix-tooltip")).stream().map(string -> string + "\n").collect(Collectors.joining()));
-
     }
 
 
