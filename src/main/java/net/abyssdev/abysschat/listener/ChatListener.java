@@ -2,6 +2,7 @@ package net.abyssdev.abysschat.listener;
 
 import net.abyssdev.abysschat.AbyssChat;
 import net.abyssdev.abysschat.comparator.GroupComparator;
+import net.abyssdev.abysschat.event.AbyssPlayerChatEvent;
 import net.abyssdev.abysschat.format.Format;
 import net.abyssdev.abysschat.player.ChatPlayer;
 import net.abyssdev.abysschat.variable.ChatVariable;
@@ -81,15 +82,23 @@ public class ChatListener extends AbyssListener<AbyssChat> {
 
         }
 
+        final AbyssPlayerChatEvent chatEvent = new AbyssPlayerChatEvent(player, event.getMessage());
+
+        this.getPlugin().getServer().getPluginManager().callEvent(chatEvent);
+
+        if (chatEvent.isCancelled()) {
+            return;
+        }
+
         if (components.size() == 3) {
             components.add(new TextComponent(TextComponent.fromLegacyText(
-                                    player.hasPermission("abysschat.color") ? Color.parse(format.getChatColor() + event.getMessage())
-                                            : Color.parse(format.getChatColor() + Color.strip(event.getMessage())))));
+                                    player.hasPermission("abysschat.color") ? Color.parse(format.getChatColor() + chatEvent.getMessage())
+                                            : Color.parse(format.getChatColor() + Color.strip(chatEvent.getMessage())))));
 
         }
 
         for (final Player online : Bukkit.getOnlinePlayers()) {
-            online.spigot().sendMessage(components.toArray(new BaseComponent[0]));
+            online.spigot().sendMessage(components.toArray(new TextComponent[0]));
         }
 
         chatPlayer.setMessages(chatPlayer.getMessages() + 1);
