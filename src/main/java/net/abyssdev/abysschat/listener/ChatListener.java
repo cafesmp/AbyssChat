@@ -8,6 +8,7 @@ import net.abyssdev.abysschat.player.ChatPlayer;
 import net.abyssdev.abysschat.variable.ChatVariable;
 import net.abyssdev.abysslib.listener.AbyssListener;
 import net.abyssdev.abysslib.placeholder.PlaceholderReplacer;
+import net.abyssdev.abysslib.scheduler.AbyssScheduler;
 import net.abyssdev.abysslib.text.Color;
 import net.abyssdev.abysslib.utils.tuple.Pair;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -18,10 +19,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 public class ChatListener extends AbyssListener<AbyssChat> {
 
+    private static final PlaceholderReplacer REPLACER = new PlaceholderReplacer().setUsePlaceholderAPI(true);
     private static final Comparator<Pair<String, Format>> COMPARATOR = new GroupComparator();
 
     private final Map<String, Format> formats = new HashMap<>();
@@ -57,7 +60,7 @@ public class ChatListener extends AbyssListener<AbyssChat> {
                     this.getPlugin().getMessageCache().sendMessage(
                             event.getPlayer(),
                             "messages.no-permission-for-variable",
-                            new PlaceholderReplacer().addPlaceholder("%variable%", var)
+                            new PlaceholderReplacer().addPlaceholder("%variable%", Color.parse(var))
                     );
                     return;
                 }
@@ -67,41 +70,48 @@ public class ChatListener extends AbyssListener<AbyssChat> {
 
                 if (split.length >= 1) {
                     components.add(new TextComponent(TextComponent.fromLegacyText(
-                            player.hasPermission("abysschat.color") ? Color.parse(format.getChatColor() + split[0])
-                                    : Color.parse(format.getChatColor() + Color.strip(split[0])))));
+                            player.hasPermission("abysschat.color") ? Color.parse(REPLACER.parse(format.getChatColor()) + split[0])
+                                    : Color.parse(REPLACER.parse(format.getChatColor()) + Color.strip(split[0])))));
                 }
 
                 components.add(variable.getReplacement(player));
 
                 if (split.length > 1) {
                     components.add(new TextComponent(TextComponent.fromLegacyText(
-                            player.hasPermission("abysschat.color") ? Color.parse(format.getChatColor() + split[1])
-                                    : Color.parse(format.getChatColor() + Color.strip(split[1])))));
+                            player.hasPermission("abysschat.color") ? Color.parse(REPLACER.parse(format.getChatColor()) + split[1])
+                                    : Color.parse(REPLACER.parse(format.getChatColor()) + Color.strip(split[1])))));
                 }
             }
 
         }
 
-        final AbyssPlayerChatEvent chatEvent = new AbyssPlayerChatEvent(player, event.getMessage());
+        AbyssScheduler.sync().run(() -> {
+            final AbyssPlayerChatEvent chatEvent = new AbyssPlayerChatEvent(player, event.getMessage());
 
-        this.getPlugin().getServer().getPluginManager().callEvent(chatEvent);
+            this.getPlugin().getServer().getPluginManager().callEvent(chatEvent);
 
-        if (chatEvent.isCancelled()) {
-            return;
-        }
+            if (chatEvent.isCancelled()) {
+                return;
+            }
 
-        if (components.size() == 3) {
-            components.add(new TextComponent(TextComponent.fromLegacyText(
-                                    player.hasPermission("abysschat.color") ? Color.parse(format.getChatColor() + chatEvent.getMessage())
-                                            : Color.parse(format.getChatColor() + Color.strip(chatEvent.getMessage())))));
+            if (components.size() == 3) {
+                components.add(new TextComponent(TextComponent.fromLegacyText(
+                        player.hasPermission("abysschat.color") ? Color.parse(REPLACER.parse(format.getChatColor()) + chatEvent.getMessage())
+                                : Color.parse(REPLACER.parse(format.getChatColor()) + Color.strip(chatEvent.getMessage())))));
 
-        }
+            }
 
-        for (final Player online : Bukkit.getOnlinePlayers()) {
-            online.spigot().sendMessage(components.toArray(new TextComponent[0]));
-        }
+            CompletableFuture.runAsync(() -> {
+                final TextComponent[] comps = components.toArray(new TextComponent[0]);
 
-        chatPlayer.setMessages(chatPlayer.getMessages() + 1);
+                for (final Player online : Bukkit.getOnlinePlayers()) {
+                    online.spigot().sendMessage(comps);
+                }
+            });
+
+
+            chatPlayer.setMessages(chatPlayer.getMessages() + 1);
+        });
     }
 
     private String getGroup(final Player player) {

@@ -1,6 +1,5 @@
 package net.abyssdev.abysschat.event;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
