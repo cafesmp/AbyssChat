@@ -70,16 +70,16 @@ public class ChatListener extends AbyssListener<AbyssChat> {
 
                 if (split.length >= 1) {
                     components.add(new TextComponent(TextComponent.fromLegacyText(
-                            player.hasPermission("abysschat.color") ? Color.parse(REPLACER.parse(format.getChatColor()) + split[0])
-                                    : Color.parse(REPLACER.parse(format.getChatColor()) + Color.strip(split[0])))));
+                            player.hasPermission("abysschat.color") ? Color.parse(REPLACER.parse(player, format.getChatColor()) + split[0])
+                                    : Color.parse(REPLACER.parse(player, format.getChatColor()) + Color.strip(split[0])))));
                 }
 
                 components.add(variable.getReplacement(player));
 
                 if (split.length > 1) {
                     components.add(new TextComponent(TextComponent.fromLegacyText(
-                            player.hasPermission("abysschat.color") ? Color.parse(REPLACER.parse(format.getChatColor()) + split[1])
-                                    : Color.parse(REPLACER.parse(format.getChatColor()) + Color.strip(split[1])))));
+                            player.hasPermission("abysschat.color") ? Color.parse(REPLACER.parse(player, format.getChatColor()) + split[1])
+                                    : Color.parse(REPLACER.parse(player, format.getChatColor()) + Color.strip(split[1])))));
                 }
             }
 
@@ -96,8 +96,8 @@ public class ChatListener extends AbyssListener<AbyssChat> {
 
             if (components.size() == 3) {
                 components.add(new TextComponent(TextComponent.fromLegacyText(
-                        player.hasPermission("abysschat.color") ? Color.parse(REPLACER.parse(format.getChatColor()) + chatEvent.getMessage())
-                                : Color.parse(REPLACER.parse(format.getChatColor()) + Color.strip(chatEvent.getMessage())))));
+                        player.hasPermission("abysschat.color") ? Color.parse(REPLACER.parse(player, format.getChatColor()) + chatEvent.getMessage())
+                                : Color.parse(REPLACER.parse(player, format.getChatColor()) + Color.strip(chatEvent.getMessage())))));
 
             }
 
