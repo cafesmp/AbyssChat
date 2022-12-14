@@ -54,27 +54,27 @@ public final class Format {
 
 
     public TextComponent getPrefixMessage(final Player player) {
-        final TextComponent component = new TextComponent(TextComponent.fromLegacyText(Format.REPLACER.parse(player, this.prefix)));
+        final TextComponent component = new TextComponent(TextComponent.fromLegacyText(Color.parse(Format.REPLACER.parse(player, this.prefix))));
 
-        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(Format.REPLACER.parse(player, this.prefixTooltip))));
+        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(Color.parse(Format.REPLACER.parse(player, this.prefixTooltip)))));
         component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, Format.REPLACER.parse(player, this.prefixCommand)));
 
         return component;
     }
 
     public TextComponent getNameMessage(final Player player) {
-        final TextComponent component = new TextComponent(TextComponent.fromLegacyText(Format.REPLACER.parse(player, this.name)));
+        final TextComponent component = new TextComponent(TextComponent.fromLegacyText(Color.parse(Format.REPLACER.parse(player, this.name))));
 
-        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(Format.REPLACER.parse(player, this.nameTooltip))));
+        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(Color.parse(Format.REPLACER.parse(player, this.nameTooltip)))));
         component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, Format.REPLACER.parse(player, this.nameCommand)));
 
         return component;
     }
 
     public TextComponent getSuffixMessage(final Player player) {
-        final TextComponent component = new TextComponent(TextComponent.fromLegacyText(Format.REPLACER.parse(player, Format.REPLACER.parse(player, this.suffix))));
+        final TextComponent component = new TextComponent(TextComponent.fromLegacyText(Format.REPLACER.parse(player, Color.parse(Format.REPLACER.parse(player, this.suffix)))));
 
-        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(Format.REPLACER.parse(player, this.suffixTooltip))));
+        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(Color.parse(Format.REPLACER.parse(player, this.suffixTooltip)))));
         component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, Format.REPLACER.parse(player, this.suffixCommand)));
 
         return component;
