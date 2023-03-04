@@ -9,6 +9,7 @@ import net.abyssdev.abysschat.menu.TopMenu;
 import net.abyssdev.abysschat.player.ChatPlayer;
 import net.abyssdev.abysschat.storage.ChatStorage;
 import net.abyssdev.abysschat.variable.impl.BalanceChatVariable;
+import net.abyssdev.abysschat.variable.impl.InventoryChatVariable;
 import net.abyssdev.abysschat.variable.impl.ItemChatVariable;
 import net.abyssdev.abysschat.variable.set.ChatVariableSet;
 import net.abyssdev.abysslib.economy.provider.Economy;
@@ -46,7 +47,7 @@ public final class AbyssChat extends AbyssPlugin {
 
     @Override
     public void onEnable() {
-        this.chatVariableSet.register(new BalanceChatVariable(this), new ItemChatVariable(this));
+        this.chatVariableSet.register(new BalanceChatVariable(this), new ItemChatVariable(this), new InventoryChatVariable(this));
 
         this.economy = DefaultEconomyRegistry.get().getEconomy("Vault");
 

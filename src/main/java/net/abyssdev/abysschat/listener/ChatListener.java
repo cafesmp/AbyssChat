@@ -11,7 +11,6 @@ import net.abyssdev.abysslib.placeholder.PlaceholderReplacer;
 import net.abyssdev.abysslib.scheduler.AbyssScheduler;
 import net.abyssdev.abysslib.text.Color;
 import net.abyssdev.abysslib.utils.tuple.Pair;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -22,7 +21,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
-public class ChatListener extends AbyssListener<AbyssChat> {
+public final class ChatListener extends AbyssListener<AbyssChat> {
 
     private static final PlaceholderReplacer REPLACER = new PlaceholderReplacer().setUsePlaceholderAPI(true);
     private static final Comparator<Pair<String, Format>> COMPARATOR = new GroupComparator();

@@ -5,3 +5,7 @@ variables:
       - "&7Name: %player%"
   item:
     show: "&6[&e%item% x%amount%&6]"
+  inventory:
+    show: "&6[&e%player%'s Inventory&6]"
+    tooltip:
+      - "&7&oClick to open inventory!"
