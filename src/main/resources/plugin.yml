@@ -1,5 +1,5 @@
 name: AbyssChat
-version: '1.0.3'
+version: '1.0.4'
 main: net.abyssdev.abysschat.AbyssChat
 authors:
   - sysdm
