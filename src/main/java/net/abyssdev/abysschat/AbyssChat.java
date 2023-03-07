@@ -166,5 +166,4 @@ public final class AbyssChat extends AbyssPlugin {
         this.sortedPlayers.addAll(this.storage.allValues());
         this.sortedPlayers.sort(Comparator.comparingLong(player -> -player.getMessages()));
     }
-
 }

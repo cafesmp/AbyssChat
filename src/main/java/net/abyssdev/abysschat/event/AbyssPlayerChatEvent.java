@@ -34,5 +34,4 @@ public final class AbyssPlayerChatEvent extends Event implements Cancellable {
     public static HandlerList getHandlerList() {
         return HANDLER_LIST;
     }
-
 }

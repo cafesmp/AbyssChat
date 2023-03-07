@@ -17,5 +17,4 @@ public final class ChatVariableSet {
     public void register(final ChatVariable... variables) {
         this.set.addAll(Arrays.asList(variables));
     }
-
 }

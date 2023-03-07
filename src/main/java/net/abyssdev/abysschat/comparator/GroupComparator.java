@@ -13,5 +13,4 @@ public final class GroupComparator implements Comparator<Pair<String, Format>> {
     public int compare(final Pair<String, Format> first, final Pair<String, Format> second) {
         return Integer.compare(first.getRight().getPriority(), second.getRight().getPriority());
     }
-
 }

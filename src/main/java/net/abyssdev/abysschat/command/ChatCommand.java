@@ -36,5 +36,4 @@ public final class ChatCommand extends Command<CommandSender> {
 
         this.plugin.getMessageCache().sendMessage(sender, "messages.admin-help");
     }
-
 }

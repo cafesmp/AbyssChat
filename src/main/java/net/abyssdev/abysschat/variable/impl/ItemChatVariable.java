@@ -63,5 +63,4 @@ public final class ItemChatVariable implements ChatVariable {
 
         return component;
     }
-
 }
