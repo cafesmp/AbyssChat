@@ -1,6 +1,7 @@
 name: AbyssChat
 version: '1.0.4'
 main: net.abyssdev.abysschat.AbyssChat
+api-version: 1.13
 authors:
   - sysdm
   - Relocation
