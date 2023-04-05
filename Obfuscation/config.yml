@@ -28,7 +28,6 @@ settings:
     - "Global: jdk/"
     - "Global: sun/"
     - "Global: java/"
-    - "Global: net/abyssdev/abyssauctions/api/"
   inclusions: []
 transformers:
   nopspamtransformer:
